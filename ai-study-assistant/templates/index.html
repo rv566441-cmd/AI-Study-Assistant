@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Study Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <h1>AI Study Assistant 🤖</h1>
+
+    <input type="text" id="input" placeholder="Enter topic or question">
+    <br><br>
+
+    <button onclick="askAI()">Ask AI</button>
+    <button onclick="getNotes()">Generate Notes</button>
+    <button onclick="getMCQ()">Generate MCQ</button>
+
+    <pre id="output"></pre>
+</div>
+
+<script>
+function askAI() {
+    let msg = document.getElementById("input").value;
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: msg})
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText = data.reply;
+    });
+}
+
+function getNotes() {
+    let topic = document.getElementById("input").value;
+
+    fetch("/notes", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({topic: topic})
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText = data.notes;
+    });
+}
+
+function getMCQ() {
+    let topic = document.getElementById("input").value;
+
+    fetch("/mcq", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({topic: topic})
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText = data.mcq;
+    });
+}
+</script>
+
+</body>
+</html>
